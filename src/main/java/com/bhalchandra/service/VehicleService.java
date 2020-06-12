@@ -9,7 +9,5 @@ public interface VehicleService {
 
     Vehicle findOne(String id);
 
-    Vehicle create(Vehicle vehicle);
-
-    Vehicle update(Vehicle vehicle);
+    List<Vehicle> createElseUpdate(List<Vehicle> vehicles);
 }
