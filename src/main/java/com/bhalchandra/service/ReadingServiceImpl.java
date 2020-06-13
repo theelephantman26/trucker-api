@@ -1,7 +1,6 @@
 package com.bhalchandra.service;
 
 import com.bhalchandra.entity.Reading;
-import com.bhalchandra.entity.Vehicle;
 import com.bhalchandra.repository.ReadingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,17 +18,7 @@ public class ReadingServiceImpl implements ReadingService {
     }
 
     @Override
-    public Reading findOne() {
-        return null;
-    }
-
-    @Override
-    public Reading create() {
-        return null;
-    }
-
-    @Override
-    public Reading update(Reading vehicle) {
-        return null;
+    public Reading create(Reading reading) {
+        return repository.save(reading);
     }
 }
