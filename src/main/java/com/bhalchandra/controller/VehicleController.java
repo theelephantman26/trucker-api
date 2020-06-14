@@ -1,11 +1,13 @@
 package com.bhalchandra.controller;
 
 import com.bhalchandra.entity.Vehicle;
+import com.bhalchandra.entity.VehicleWrapper;
 import com.bhalchandra.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resources;
 import java.util.List;
 
 @RestController
@@ -18,6 +20,7 @@ public class VehicleController {
     public List<Vehicle> findAll() {
         return service.findAll();
     }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Vehicle findOne(@PathVariable("id") String id) {
         return service.findOne(id);
@@ -25,7 +28,7 @@ public class VehicleController {
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Vehicle> createUpdateAll(List<Vehicle> vehicles) {
+    public @ResponseBody List<Vehicle> createUpdateAll(@RequestBody List<Vehicle> vehicles) {
         return service.createElseUpdate(vehicles);
     }
 }
