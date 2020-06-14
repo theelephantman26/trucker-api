@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
@@ -34,9 +33,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     @Transactional
     public List<Vehicle> createElseUpdate(List<Vehicle> vehicles) {
-        vehicles = (ArrayList<Vehicle>) vehicles;
-        vehicles.forEach((vehicle -> repository.save(vehicle)));
-        return (List<Vehicle>) vehicles;
+        return (List<Vehicle>) repository.saveAll(vehicles);
     }
 
 }
