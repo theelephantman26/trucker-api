@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -17,6 +18,9 @@ public class Alert {
     String type;
 
     String level;
+
+    @ManyToOne
+    Vehicle vehicle;
 
     @CreationTimestamp
     Timestamp createdAt;
@@ -55,5 +59,13 @@ public class Alert {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 }

@@ -42,6 +42,7 @@ public class ReadingServiceImpl implements ReadingService {
             Alert alert = new Alert();
             alert.setLevel("HIGH");
             alert.setType("ENGINE RPM LEVEL");
+            alert.setVehicle(vehicle);
             alertService.create(alert);
         }
 
@@ -49,13 +50,15 @@ public class ReadingServiceImpl implements ReadingService {
             Alert alert = new Alert();
             alert.setLevel("MEDIUM");
             alert.setType("FUEL LEVEL LOW");
-            alertService.create(alert)
+            alert.setVehicle(vehicle);
+            alertService.create(alert);
         }
 
         if (checkTirePressure(reading.getTires())) {
             Alert alert = new Alert();
             alert.setLevel("LOW");
             alert.setType("TIRE PRSSURE OFF");
+            alert.setVehicle(vehicle);
             alertService.create(alert);
         }
 
@@ -63,6 +66,7 @@ public class ReadingServiceImpl implements ReadingService {
             Alert alert = new Alert();
             alert.setLevel("LOW");
             alert.setType("TIRE PRESSURE OFF");
+            alert.setVehicle(vehicle);
             alertService.create(alert);
         }
     }
