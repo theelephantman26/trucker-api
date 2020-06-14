@@ -5,14 +5,17 @@ import com.bhalchandra.exception.BadRequestException;
 import com.bhalchandra.exception.ResourceNotFoundException;
 import com.bhalchandra.repository.VehicleRepository;
 import com.mysql.cj.x.protobuf.MysqlxPrepare;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
+    @Autowired
     public VehicleRepository repository;
 
     @Override
@@ -31,7 +34,9 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     @Transactional
     public List<Vehicle> createElseUpdate(List<Vehicle> vehicles) {
-        return (List<Vehicle>) repository.saveAll(vehicles);
+        vehicles = (ArrayList<Vehicle>) vehicles;
+        vehicles.forEach((vehicle -> repository.save(vehicle)));
+        return (List<Vehicle>) vehicles;
     }
 
 }
