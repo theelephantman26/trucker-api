@@ -1,13 +1,11 @@
 package com.bhalchandra.controller;
 
 import com.bhalchandra.entity.Vehicle;
-import com.bhalchandra.entity.VehicleWrapper;
 import com.bhalchandra.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resources;
 import java.util.List;
 
 @RestController
