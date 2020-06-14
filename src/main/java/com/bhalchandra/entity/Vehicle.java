@@ -22,6 +22,10 @@ public class Vehicle {
 
     String lastServiceDate;
 
+    public Vehicle() {
+
+    }
+
     public String getVin() {
         return vin;
     }
