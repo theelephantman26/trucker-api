@@ -78,6 +78,11 @@ public class AlertServiceImpl implements AlertService {
         return repository.findHighAlertsSince(date);
     }
 
+    @Override
+    public List<Alert> findAllForVehicle(String vehicleId) {
+        return repository.findByVehicleVin(vehicleId);
+    }
+
     public boolean checkTirePressure(Tires tires) {
         return (tires.getFrontLeft() < 32 || tires.getFrontLeft() > 36) &&
                 (tires.getFrontRight() < 32 || tires.getFrontRight() > 36) &&

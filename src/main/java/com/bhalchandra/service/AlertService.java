@@ -14,4 +14,6 @@ public interface AlertService {
     public void checkAndCreateAlerts(Reading reading);
 
     public List<Alert> findAllWithinThePastHours(Integer pastHours);
+
+    public List<Alert> findAllForVehicle(String vehicleId);
 }
