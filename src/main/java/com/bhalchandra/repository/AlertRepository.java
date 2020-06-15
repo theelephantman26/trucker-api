@@ -13,4 +13,6 @@ public interface AlertRepository extends CrudRepository<Alert, String> {
     @Query("SELECT alert FROM Alert alert WHERE alert.createdAt > :pastDate and alert.level = 'HIGH' ORDER BY alert.createdAt")
     public List<Alert> findHighAlertsSince(@Param("pastDate") Date pastDate);
 
+    public List<Alert> findByVehicleVin(String vin);
+
 }
