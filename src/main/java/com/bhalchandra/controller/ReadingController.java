@@ -1,13 +1,12 @@
 package com.bhalchandra.controller;
 
+import com.bhalchandra.entity.GeoLocation;
+import com.bhalchandra.entity.PastGeolocationResponse;
 import com.bhalchandra.entity.Reading;
 import com.bhalchandra.service.ReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +25,10 @@ public class ReadingController {
     consumes = MediaType.APPLICATION_JSON_VALUE)
     public Reading create(@RequestBody Reading reading) {
         return service.create(reading);
+    }
+
+    @RequestMapping(value = "/geolocation/{vin}/{minutes}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PastGeolocationResponse> getGeoLocationWithinTimeframe(@PathVariable("minutes") Integer pastMinutes, @PathVariable("vin") String vin) {
+        return service.findGeolocationWithinPastMinutes(vin, pastMinutes);
     }
 }
