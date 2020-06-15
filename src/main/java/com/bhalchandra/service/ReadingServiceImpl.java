@@ -1,24 +1,21 @@
 package com.bhalchandra.service;
 
-import com.bhalchandra.entity.Alert;
-import com.bhalchandra.entity.Reading;
-import com.bhalchandra.entity.Tires;
-import com.bhalchandra.entity.Vehicle;
+import com.bhalchandra.entity.*;
 import com.bhalchandra.repository.ReadingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class ReadingServiceImpl implements ReadingService {
     @Autowired
     ReadingRepository repository;
-
-    @Autowired
-    VehicleService vehicleService;
 
     @Autowired
     AlertService alertService;
@@ -31,50 +28,30 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public Reading create(Reading reading) {
         reading = repository.save(reading);
-        checkAndCreateAlerts(reading);
+        alertService.checkAndCreateAlerts(reading);
         return reading;
     }
 
-    @Async
-    public void checkAndCreateAlerts(Reading reading) {
-        Vehicle vehicle = vehicleService.findOne(reading.getVin());
-        if (reading.getEngineRpm() > vehicle.getRedlineRpm()) {
-            Alert alert = new Alert();
-            alert.setLevel("HIGH");
-            alert.setType("ENGINE RPM LEVEL");
-            alert.setVehicle(vehicle);
-            alertService.create(alert);
-        }
+    @Override
+    public List<PastGeolocationResponse> findGeolocationWithinPastMinutes(String vehicleId, Integer pastMinutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, -pastMinutes);
+        Date date = calendar.getTime();
 
-        if (reading.getFuelVolume() < 0.1 * vehicle.getMaxFuelVolume()) {
-            Alert alert = new Alert();
-            alert.setLevel("MEDIUM");
-            alert.setType("FUEL LEVEL LOW");
-            alert.setVehicle(vehicle);
-            alertService.create(alert);
-        }
+        ArrayList<PastGeolocationResponse> results = new ArrayList<PastGeolocationResponse>();
+        List<Reading> records = repository.findGeolocationSinceMinutes(date, vehicleId);
+        records.forEach(record -> {
+            PastGeolocationResponse result = new PastGeolocationResponse();
+            result.setVehicleId(record.getVin());
 
-        if (checkTirePressure(reading.getTires())) {
-            Alert alert = new Alert();
-            alert.setLevel("LOW");
-            alert.setType("TIRE PRSSURE OFF");
-            alert.setVehicle(vehicle);
-            alertService.create(alert);
-        }
+            GeoLocation geoLocation = new GeoLocation();
+            geoLocation.setLatitude(record.getLatitude());
+            geoLocation.setLongitude(record.getLongitude());
 
-        if (reading.getEngineCoolantLow() || reading.getCheckEngineLightOn()) {
-            Alert alert = new Alert();
-            alert.setLevel("LOW");
-            alert.setType("TIRE PRESSURE OFF");
-            alert.setVehicle(vehicle);
-            alertService.create(alert);
-        }
-    }
+            result.setGeoLocation(geoLocation);
 
-    public boolean checkTirePressure(Tires tires) {
-        return (tires.getFrontLeft() < 32 || tires.getFrontLeft() > 36) &&
-                (tires.getFrontRight() < 32 || tires.getFrontRight() > 36) &&
-                (tires.getRearLeft() < 32 || tires.getRearLeft() > 36) &&
-                (tires.getRearRight() < 32 || tires.getRearRight() > 36);
+            results.add(result);
+        });
+        return (List<PastGeolocationResponse>) results;
     }
 }
