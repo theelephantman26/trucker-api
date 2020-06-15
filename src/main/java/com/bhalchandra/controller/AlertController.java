@@ -25,9 +25,9 @@ public class AlertController {
         return service.findAllWithinThePastHours(pastHours);
     }
 
-    @RequestMapping(value = "/{vin}" , method = RequestMethod.GET,
+    @RequestMapping(value = "/vehicle/{vin}" , method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Alert> getAllAlertsForVehicle(String vehicleId) {
-        return null;
+    public List<Alert> getAllAlertsForVehicle(@PathVariable("vin") String vehicleId) {
+        return service.findAllForVehicle(vehicleId);
     }
 }
