@@ -1,15 +1,15 @@
 package com.bhalchandra.service;
 
-import com.bhalchandra.entity.Alert;
-import com.bhalchandra.entity.Reading;
-import com.bhalchandra.entity.Tires;
-import com.bhalchandra.entity.Vehicle;
+import com.bhalchandra.entity.*;
 import com.bhalchandra.repository.AlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -68,6 +68,14 @@ public class AlertServiceImpl implements AlertService {
             alert.setVehicle(vehicle);
             create(alert);
         }
+    }
+
+    @Override
+    public List<Alert> findAllWithinThePastHours(Integer pastHours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, -pastHours);
+        Date date = calendar.getTime();
+        return repository.findHighAlertsSince(date);
     }
 
     public boolean checkTirePressure(Tires tires) {
